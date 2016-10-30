@@ -1,0 +1,41 @@
+# Room Solver
+# Created by: Josie Barth
+# Date: October 27th 2016
+# Last Modified: October 29th 2016 
+
+
+Problem statement:
+
+    Given n people trying to sort out room arrangements for n rooms, this 
+    program solves possible room combination given the preferences from
+    each user.  If no room combinations are possible to satisfy "yes" 
+    preferences to each person, this program prints "no solution" to 
+    standard output.
+
+Example input: 
+
+    First line of input is the number of people (which is also equal to 
+    the number of rooms).
+    The following n lines of input are the names of n people, each with 
+    n preferences.  Preferences are indicated by either Y (yes) or N (no)
+    for each room.
+
+     4
+     Josie Y N Y N
+     Sophie Y N N N
+     Cristiana N N N Y
+     Madison N Y Y Y
+
+How to compile:
+    
+    Use the makefile:
+        1) run "make"
+        2) run executable binary -- ./roomsolver INPUT.txt 
+
+    $ make
+    clang++ -O0 -Wall -Wextra -g -o roomsolver RoomSolver.cpp main.cpp 
+    $ ./roomsolver example-input.txt
+
+Time and Space complexity analysis:
+
+    TODO
