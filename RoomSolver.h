@@ -11,6 +11,8 @@
 #include <iostream>
 #include <string.h>
 #include <vector>
+#include <unordered_map>
+#include <functional> // for hashing 
 
 using namespace std;
 
@@ -26,10 +28,15 @@ using namespace std;
 //  combinations are possible
 //
 
-// struct {
-//     string name;
-//     bool preference;
-// }
+struct onePreference {
+    string name;
+    int room;
+};
+
+struct coords {
+    int row;
+    int col;
+};
 
 class RoomSolver
 {
@@ -57,13 +64,17 @@ public:
     // reads room preferences for each user, returns false at EOF
     bool readRoomPref(string filename);
 
+    // prints room preferences for each user (the input from readRoomPref)
+    void printRoomPreferences();
+
     // solves all possible room combinations where each person gets a room
     // with a preference of "yes", if possible
-    void FindRoomCombo(int row, int col);
+    // wrapper function for solve
+    void FindRoomCombos();
 
     // prints a satisfying room combination, otherwise prints 
     // "no combination possible"
-    void printRoomCombo();
+    void printRoomCombos();
 
 private:
 
@@ -75,8 +86,19 @@ private:
     // row n in the PreferenceMap is parallel to index n in the array Names
     vector<string> Names; 
 
-    // function for debugging to see if user input is read in correctly
-    void printRoomPreferences();
+    vector< vector<onePreference> > Solutions;
+
+    unordered_map<int, bool> RoomMap;
+
+    void addToRoomMap(int room);
+
+    bool isRoomTaken(int room);
+
+    void removeFromRoomMap(int room);
+
+    // solves all possible room combinations where each person gets a room
+    // with a preference of "yes", if possible
+    void solve(int person, vector<onePreference> testSoln);
 };
 
 #endif

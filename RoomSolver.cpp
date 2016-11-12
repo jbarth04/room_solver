@@ -82,26 +82,104 @@ bool RoomSolver::readRoomPref(string filename)
     return false;
 }
 
+// wrapper function for solve
+void RoomSolver::FindRoomCombos() 
+{
+    vector<onePreference> testSoln;
+    solve(0, testSoln);
+}
+
 // solves all possible room combinations where each person gets a room
 // with a preference of "yes", if possible
-void RoomSolver::FindRoomCombo(int row, int col)
+void RoomSolver::solve(int person, vector<onePreference> testSoln)
 {
-    for (int i = row; i < numPeople; i++) {
-        for (int j = col; j < numPeople; j++) {
-            
+    
+    if (person >= numPeople) {
+
+        if (testSoln.size() == (unsigned long)numPeople) { // get rid of warning
+
+            Solutions.push_back(testSoln);
         }
+        return;
+    }
+
+    for (int room = 0; room < numPeople; room++) {
+
+        // check user preference
+        if (PreferenceMap[person][room] == true) {
+        
+            if (not isRoomTaken(room)) {
+
+                addToRoomMap(room);
+
+                onePreference testPref;
+                testPref.name = Names[person];
+                testPref.room = room;
+
+                testSoln.push_back(testPref);
+
+                // recursively solve for next person
+                solve((person + 1), testSoln);
+
+                // remove previous recursive solutions
+                testSoln.pop_back();
+                removeFromRoomMap(room);
+            }
+        }  
     }
 }
 
-// prints a satisfying room combination, otherwise prints 
-// "no combination possible"
-void RoomSolver::printRoomCombo()
+// if a room is already taken in the room map, returns true,
+// otherwise returns false
+bool RoomSolver::isRoomTaken(int room)
 {
-    printRoomPreferences();
-    return;
+    if (RoomMap[room] == true) {
+        return true;
+    } 
+
+    return false;        
 }
 
+// given a room number, adds the room as taken to the room map
+void RoomSolver::addToRoomMap(int room)
+{
+
+    RoomMap[room] = true;
+}
+
+// given a room number, removes the room as taken from the room map
+void RoomSolver::removeFromRoomMap(int room)
+{
+
+    RoomMap.erase(room);
+}
+
+// prints all satisfying room combinations, otherwise prints 
+// "No solution for given user preferences"
+void RoomSolver::printRoomCombos()
+{
+    // printRoomPreferences();
+    int numSolutions = Solutions.size();
+
+    if (numSolutions <= 0) {
+        cout << "No solution for given user preferences" << endl;
+        return;
+    }
+
+    for (int i = 0; i < numSolutions; i++) {
+        cout << "Solution " << (i + 1) << ": " << endl;
+        for (int j = 0; j < numPeople; j++) {
+
+            cout << Solutions[i][j].name << " is in room " << (Solutions[i][j].room + 1) << endl;
+
+        }
+        cout << endl;
+    }
+}
+
+// prints room preferences map for each user
 void RoomSolver::printRoomPreferences() {
+
     for (int i = 0; i < numPeople; i++) {
         cout << Names[i] << "'s preferences are ";
         for (int j = 0; j < numPeople; j++) {

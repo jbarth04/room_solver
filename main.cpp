@@ -17,7 +17,7 @@ int main(int ac, char *av[])
     
     if (ac == 1) {
         
-        cout << "Room Input Needed\n"; 
+        cout << "Room Preferences Input Needed\n"; 
         return 1;
     }
     
@@ -26,7 +26,9 @@ int main(int ac, char *av[])
         return 1;
     }
 
-    RS.printRoomCombo();
+    RS.FindRoomCombos();
+
+    RS.printRoomCombos();
     
     return 0;
 }

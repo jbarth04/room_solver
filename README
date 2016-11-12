@@ -36,6 +36,22 @@ How to compile:
     clang++ -O0 -Wall -Wextra -g -o roomsolver RoomSolver.cpp main.cpp 
     $ ./roomsolver example-input.txt
 
-Time and Space complexity analysis:
 
-    TODO
+Architecture:
+    
+    The user input is read and stored in a 2D array preferenceMap.
+    The room combinations are recursively solved by iterating through
+    each user preference.  If a user gives a "yes" preference to a room
+    and that room is not already taken, then that room is added to the
+    room map as "taken", the room is temporarily assigned to that user, and 
+    another recursive call to "solve" is executed for the next user.  Room 
+    availability is stored in a hash map that takes the room number as a key 
+    and returns a value of true if the room is taken and false is it's still
+    available.  If n temporary rooms have been assigned to n number of
+    users, then the combination of those rooms are added to the Solutions 
+    array.  This same process repeats until all combinations are tested.  
+
+    The recursive function "solve" has O(n^n) time complexity, since 
+    at every recursive call for n users (the rows), we must check n rooms
+    for each user (the columns)
+
